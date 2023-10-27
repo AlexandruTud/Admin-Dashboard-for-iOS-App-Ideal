@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/css/bootstrap-extended.min.css">
+    <link rel="stylesheet" type="text/css" href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/fonts/simple-line-icons/style.min.css">
+    <link rel="stylesheet" type="text/css" href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/css/colors.min.css">
+    <link rel="stylesheet" type="text/css" href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/css/bootstrap.min.css"> 
+    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./icons8-user-90.png">
+  
+</head>
+ 
+<body>
+  
+  <div class="sidebar">
+
+    <div class="logo-details">
+      <i class='bx bx-user icon'></i>
+        <div class="logo_name">Admin</div>
+        <i class='bx bx-menu' id="btn" ></i>
+    </div>
+
+    <hr class="subtire"> 
+
+    <ul class="nav-list">
+
+     <li>
+        <a href="#" class="profile" id="dash">
+          <i class='bx bx-grid-alt' ></i>
+          <span class="links_name" >Dashboard</span>
+        </a>
+         <span class="tooltip">Dashboard</span>
+     </li>
+
+     <li>
+       <a href="#" class="comments" id="comments">
+         <i class='bx bx-chat' ></i>
+         <span class="links_name">Comments</span>
+       </a>
+       <span class="tooltip">Comments</span>
+     </li>
+
+     <li>
+      <a href="#" class="settings" id="settings">
+       <i class='bx bx-message-rounded'></i>
+        <span class="links_name">Suggestions</span>
+      </a>
+      <span class="tooltip">Suggestions</span>
+    </li>
+
+     <li>
+       <a href="#" class="history" id="history">
+         <i class='bx bx-history' ></i>
+         <span class="links_name">History</span>
+       </a>
+       <span class="tooltip">History</span>
+     </li>
+
+     <li class="profile">
+      <a href="#" id="log_out_back">
+         <i class='bx bx-log-out' id="log_out" ></i>
+      </a>
+     </li>
+    </ul>
+
+    <div id="popup" class="popup">
+      <div class="popup-content">
+        <button id="closeButton" onclick="closePopup()">X</button>
+          <input type="text" id="todoInput" placeholder="Add a task">
+          <button onclick="addItem()">Add task</button>
+      </div>
+    </div>
+  </div>
+  
+
+  <section class="home-section">
+
+  </section>
+
+  <section class="comments-section">
+
+  </section>
+
+  <section class="history-section">
+
+  </section>
+
+  <section class="settings-section">
+    
+  </section>
+
+
+
+  <div class="navbar-bottom">
+    <ul class="nav-list">
+      <li>
+        <a href="#" class="profile" id="dash-navbar">
+          <i class='bx bx-grid-alt' ></i>
+          <span class="links_name" >Dashboard</span>
+        </a>
+         <span class="tooltip">Dashboard</span>
+     </li>
+
+     <li>
+       <a href="#" class="comments" id="comments-navbar">
+         <i class='bx bx-chat' ></i>
+         <span class="links_name">Comments</span>
+       </a>
+       <span class="tooltip">Comments</span>
+     </li>
+
+     <li>
+      <a href="#" class="settings" id="settings-navbar">
+       <i class='bx bx-message-rounded'></i>
+        <span class="links_name">Suggestions</span>
+      </a>
+      <span class="tooltip">Suggestions</span>
+    </li>
+
+     <li>
+       <a href="#" class="history" id="history-navbar">
+         <i class='bx bx-history' ></i>
+         <span class="links_name">History</span>
+       </a>
+       <span class="tooltip">History</span>
+     </li>
+
+     <li class="profile">
+      <a href="#" id="log_out_back2">
+         <i class='bx bx-log-out' id="log_out" ></i>
+      </a>
+     </li>
+
+    </ul>
+  </div>
+  
+  
+<script src="script.js"> </script>
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-analytics.js";
+import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
+const firebaseConfig = {
+    apiKey: "AIzaSyCcMUsWV6eUR31thZDrdo4Bk8qb90wHcJg",
+    authDomain: "idealidea-36f22.firebaseapp.com",
+    databaseURL: "https://idealidea-36f22-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "idealidea-36f22",
+    storageBucket: "idealidea-36f22.appspot.com",
+    messagingSenderId: "292276589261",
+    appId: "1:292276589261:web:d251e1f617318e88f74f84",
+    measurementId: "G-Q9QG2CL22X"
+  };
+
+  const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth();
+
+        const logOutButton = document.getElementById("log_out_back");
+        logOutButton.addEventListener("click", () => {
+            signOut(auth)
+                .then(() => {
+                    console.log("User logged out successfully");
+                    window.location.href = "index.html"; 
+                })
+                .catch((error) => {
+                    console.error("Logout error: " + error);
+                });
+        });
+
+        const logOutButton2 = document.getElementById("log_out_back2");
+        logOutButton2.addEventListener("click", () => {
+            signOut(auth)
+                .then(() => {
+                    console.log("User logged out successfully");
+                    window.location.href = "index.html"; 
+                })
+                .catch((error) => {
+                    console.error("Logout error: " + error);
+                });
+        });
+
+/* onAuthStateChanged(auth, function(user) {
+  if (user) {
+
+      console.log("User is logged in");
+  } else {
+      window.location.href = "index.html";
+      console.log("User is not logged in");
+  }
+}); 
+
+window.onbeforeunload = function () {
+  return "Are you sure you want to log out this page?";
+};  
+ */ 
+
+
+</script>
+
+</body>
+</html>
+
+
+

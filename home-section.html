@@ -1,0 +1,370 @@
+<div class="grey-bg container-fluid p-2" id="dashh">
+    <section id="minimal-statistics">
+      <div class="row">
+        <div class="col-12 mt-0 mb-1">
+          <h4 class="text-uppercase">admin dashbord</h4>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xl-3 col-sm-6 col-12">
+          <div class="card1" id="card1">
+            <div class="card-content">
+              <div class="card-body">
+                <div class="media d-flex">
+                  <div class="media-body text-left">
+                    <h3 class="warning" id="totalIdeas">Loading...</h3>
+                    <span>Total Ideas</span>
+                  </div>                  
+                  <div class="align-self-center">
+                    <i class="icon-bubbles warning font-large-2 float-right"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 col-12">
+          <div class="card1">
+            <div class="card-content">
+              <div class="card-body">
+                <div class="media d-flex">
+                  <div class="media-body text-left">
+                    <h3 class="primary" id="totalUsers">Loading...</h3>
+                    <span>Total Users</span>
+                  </div>
+                  <div class="align-self-center">
+                    <i class="icon-user primary font-large-2 float-right"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+        <div class="col-xl-3 col-sm-6 col-12">
+          <div class="card1">
+            <div class="card-content">
+              <div class="card-body">
+                <div class="media d-flex">
+                  <div class="media-body text-left">
+                    <h3 class="danger" id="totalLikes">Loading...</h3>
+                    <span>Total Likes</span>
+                  </div>
+                  <div class="align-self-center">
+                    <i class="bx bx-like danger font-large-2 float-right"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 col-12">
+          <div class="card1">
+            <div class="card-content">
+              <div class="card-body">
+                <div class="media d-flex">
+                  <div class="media-body text-left">
+                    <h3 class="success" id="totalSuggestions">Loading...</h3>
+                    <span>Total Suggestions</span>
+                  </div>
+                  
+                  <div class="align-self-center">
+                    <i class="bx bx-comment-dots success font-large-2 float-right"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> 
+
+      <div class="row">
+        <div class="col-xl-12 col-md-12">
+          <div class="card1 overflow-hidden">
+            <div class="card-content">
+              <div class="card-body cleartfix">
+                <div class="media d-flex">
+                  <div class="media-body text-left">
+                    <h1 class="primary" id="totalPosts">Loading...</h1>
+                    <h4 class="primary">Total Posts</h4>
+                  </div>
+                  
+                  <div class="primary align-self-center">
+  
+                  </div>
+                  <div class="align-self-center">
+                    <i class="icon-pencil primary font-large-2 float-right" id="small3"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+      </div>
+    
+    </section>
+    
+    <section id="stats-subtitle">
+    <div class="row">
+      <div class="col-12 mt-3 mb-1">
+        <h4 class="text-uppercase">Statistics</h4>
+      </div>
+    </div>
+  
+    
+    <div class="row">
+      <div class="col-xl-6 col-md-12">
+        <div class="card1">
+          <div class="card-content">
+            <div class="card-body cleartfix">
+              <div class="media align-items-stretch">
+                <div class="media-body">
+                  <canvas id="myChart" class="canvas-container"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-xl-6 col-md-12">
+        <div class="card1">
+          <div class="card-content">
+            <div class="card-body cleartfix">
+              <div class="media align-items-stretch">
+                <div class="media-body">
+                  <canvas id="myChart2" class="canvas-container"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </section>
+
+
+
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js"></script>
+  <script src="https://apis.google.com/js/api.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://apis.google.com/js/client.js"></script>
+
+  <style>
+.canvas-container {
+  position: relative;
+  width: 100% !important;
+  max-width: 100% !important; 
+  height: 100% !important;
+}
+
+  </style>
+  
+  <script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-analytics.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
+    
+  const firebaseConfig = {
+    apiKey: "AIzaSyCcMUsWV6eUR31thZDrdo4Bk8qb90wHcJg",
+    authDomain: "idealidea-36f22.firebaseapp.com",
+    databaseURL: "https://idealidea-36f22-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "idealidea-36f22",
+    storageBucket: "idealidea-36f22.appspot.com",
+    messagingSenderId: "292276589261",
+    appId: "1:292276589261:web:d251e1f617318e88f74f84",
+    measurementId: "G-Q9QG2CL22X"
+  };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+  
+const ideasCollection = collection(db, 'ideas');
+
+// Calculare Total Ideas
+getDocs(ideasCollection)
+  .then((querySnapshot) => {
+    const ideaCount = querySnapshot.size;
+    const totalIdeasElement = document.getElementById('totalIdeas');
+    totalIdeasElement.textContent = ideaCount;
+  })
+  .catch((error) => {
+    console.error("Eroare la obținerea datelor din Firestore: ", error);
+  });
+
+const usernamesCollection = collection(db, 'usernames');
+
+// Calculare Total Users
+getDocs(usernamesCollection)
+  .then((querySnapshot) => {
+    const totalUsers = querySnapshot.size;
+    const totalUsersElement = document.getElementById('totalUsers');
+    totalUsersElement.textContent = totalUsers;   
+  })
+  .catch((error) => {
+    console.error("Eroare la obținerea datelor din Firestore: ", error);
+  });
+
+const suggestionsCollection = collection(db, 'suggestions');
+
+// Calculare Total Suggestions
+getDocs(suggestionsCollection)
+  .then((querySnapshot) => {
+    const totalSuggestions = querySnapshot.size;
+    const totalSuggestionsElement = document.getElementById('totalSuggestions');
+    totalSuggestionsElement.textContent = totalSuggestions;
+  })
+  .catch((error) => {
+    console.error("Eroare la obținerea datelor din Firestore: ", error);
+  });
+
+const likesCollection = collection(db, 'likes');
+
+// Calculare Total Likes
+getDocs(likesCollection)
+  .then((querySnapshot) => {
+    const totalLikes = querySnapshot.size;
+    const totalLikesElement = document.querySelector('.danger');
+    totalLikesElement.textContent = totalLikes;
+  })
+  .catch((error) => {
+    console.error("Eroare la obținerea datelor din Firestore: ", error);
+  });
+
+  const commentsCollection = collection(db, 'comments');
+
+  let totalComments = 0; 
+
+  // Calculare Total Comments
+getDocs(commentsCollection)
+  .then((querySnapshot) => {
+    totalComments += querySnapshot.size;
+    const totalPostsElement = document.getElementById('totalPosts');
+    totalPostsElement.textContent = totalComments;
+  })
+  .catch((error) => {
+    console.error("Eroare la obținerea datelor din Firestore: ", error);
+  });
+
+
+  getDocs(ideasCollection)
+  .then((querySnapshot) => {
+    totalComments += querySnapshot.size;
+    const totalPostsElement = document.getElementById('totalPosts');
+    totalPostsElement.textContent = totalComments;
+  })
+  .catch((error) => {
+    console.error("Eroare la obținerea datelor din Firestore: ", error);
+  });
+
+
+// Creează un obiect pentru a stoca numărul de idei postate în fiecare lună
+const ideasPerMonth = {};
+
+getDocs(ideasCollection)
+  .then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      const ideaData = doc.data();
+      const timestamp = ideaData.timestamp.toDate(); 
+      const monthYear = timestamp.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+      if (ideasPerMonth[monthYear]) {
+        ideasPerMonth[monthYear]++;
+      } else {
+        ideasPerMonth[monthYear] = 1;
+      }
+    });
+
+    // Crează un array de obiecte pentru datele graficului
+    const chartData = Object.entries(ideasPerMonth).map(([monthYear, count]) => ({ x: monthYear, y: count }));
+
+    // Creează un grafic folosind Chart.js
+    const ctx = document.getElementById('myChart').getContext('2d');
+    chartData.sort((a, b) => new Date(a.x) - new Date(b.x));
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: chartData.map(data => data.x),
+        datasets: [{
+          label: 'Ideas per Month',
+          data: chartData.map(data => data.y),
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1,
+        }],
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+  })
+  .catch((error) => {
+    console.error("Eroare la obținerea datelor din Firestore: ", error);
+  });
+
+  // Creează un obiect pentru a stoca numărul de sugestii postate în fiecare lună
+const suggestionsPerMonth = {};
+
+getDocs(suggestionsCollection) // înlocuiți "ideasCollection" cu "suggestionsCollection"
+  .then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      const suggestionData = doc.data();
+      const timestamp = suggestionData.timestamp.toDate(); 
+      const monthYear = timestamp.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+      if (suggestionsPerMonth[monthYear]) {
+        suggestionsPerMonth[monthYear]++;
+      } else {
+        suggestionsPerMonth[monthYear] = 1;
+      }
+    });
+
+    // Crează un array de obiecte pentru datele graficului
+    const chartData = Object.entries(suggestionsPerMonth).map(([monthYear, count]) => ({ x: monthYear, y: count }));
+
+    // Creează un grafic folosind Chart.js
+    const ctx = document.getElementById('myChart2').getContext('2d');
+    chartData.sort((a, b) => new Date(a.x) - new Date(b.x));
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: chartData.map(data => data.x),
+        datasets: [{
+          label: 'Suggestions per Month',
+          data: chartData.map(data => data.y),
+          backgroundColor: 'rgba(750, 192, 192, 0.2)',
+          borderColor: 'rgba(750, 192, 192, 1)',
+          borderWidth: 1,
+        }],
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+  })
+  .catch((error) => {
+    console.error("Eroare la obținerea datelor din Firestore: ", error);
+  });
+
+
+  </script>
+  
+ 

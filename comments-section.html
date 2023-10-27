@@ -1,0 +1,537 @@
+<div class="grey-bg container-fluid p-2" id="dashh">
+    <div class="row">
+        <div class="col-12 mt-0 mb-1">
+            <h4 class="text-uppercase">Comments</h4>
+        </div>
+    </div>
+    <ul class="comment-list" id="commentList">
+        <!-- Comments will be added here dynamically -->
+    </ul>
+
+    <!--<div class="loading-overlay" id="loadingOverlay">
+        <div class="loader"></div>
+    </div>-->
+    
+    <div id="customPopup" class="custom-popup">
+        <div class="custom-popup-content">
+            <div class="custom-popup-body">
+                <p>Are you sure you want to delete this comment?</p>
+            </div>
+            <div class="custom-popup-footer">
+                <button id="confirmCustomDelete" class="btn-confirm">Delete</button>
+                <button id="cancelCustomDelete" class="btn-cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="customPopup2" class="custom-popup2">
+        <div class="custom-popup-content2">
+            <div class="custom-popup-body2">
+                <p>Are you sure you want to approve this comment?</p>
+            </div>
+            <div class="custom-popup-footer2">
+                <button id="confirmCustomDelete2" class="btn-confirm2">Approve</button>
+                <button id="cancelCustomDelete2" class="btn-cancel2">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="deleteSuccessPopup" class="custom-popup">
+        <div class="custom-popup-content">
+            <div class="custom-popup-body">
+                <p>You have successfully deleted a comment.</p>
+            </div>
+            <div class="custom-popup-footer">
+                <button id="closeDeleteSuccessPopup" class="btn-confirm">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="deleteSuccessPopup2" class="custom-popup">
+        <div class="custom-popup-content">
+            <div class="custom-popup-body">
+                <p>You have successfully approved a comment.</p>
+            </div>
+            <div class="custom-popup-footer">
+                <button id="closeDeleteSuccessPopup2" class="btn-confirm">OK</button>
+            </div>
+        </div>
+    </div>
+    
+    
+
+</div>
+
+    
+
+<style>
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #11101D;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+
+.loader {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+}
+
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+h2 {
+    font-size: 24px;
+    color: #ffffff;
+}
+    
+.custom-popup, .custom-popup2 {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    
+}
+
+.custom-popup-content, .custom-popup-content2 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #262743;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.custom-popup-header, .custom-popup-header2 {
+    background: #3498db;
+    color: white;
+    padding: 10px;
+    border-radius: 5px 5px 0 0;
+}
+
+.custom-popup-body, .custom-popup-body2 {
+    padding: 10px;
+    color: white;
+}
+
+.custom-popup-footer, .custom-popup-footer2 {
+    text-align: center;
+}
+
+.btn-confirm, .btn-confirm2 {
+    background: #6823ff;
+    color: white;
+    padding: 10px 20px; 
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; 
+}
+
+.btn-confirm:hover{
+    background-color: #4516ac;
+}
+
+.btn-confirm2:hover{
+    background-color: #4516ac;
+}
+
+.btn-cancel, .btn-cancel2 {
+    background: #6823ff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; 
+}
+
+.btn-cancel:hover{
+    background-color: #4516ac;
+}
+
+.btn-cancel2:hover{
+    background-color: #4516ac;
+}
+
+.comment-list {
+    list-style: none;
+    padding: 0;
+}
+
+.idea {
+    box-shadow: 0px 0px 2px rgba(255, 255, 255, 0.1);
+    margin-bottom: 30px;
+    background-color: #141326;
+    border-radius: 2ch;
+    padding: 20px;
+}
+
+.idea-author-and-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.idea-author {
+    font-weight: bold;
+    color: white;
+    font-size: 10px;
+}
+
+.idea-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.idea-author {
+    font-weight: bold;
+    margin-right: 10px;
+    color: white;
+    font-size: 10px;
+}
+
+    .idea-category {
+        font-size: 12px;
+        color: #ffffff;
+        margin-top: 5px;
+    }
+
+    .idea-text {
+        color: #ffffff;
+        font-size: 24px;
+    }
+
+    .idea-date {
+        color: #ffffff51;
+        font-size: 10px;
+
+    }
+
+    .delete-button, .approve-button {
+        background-color: #ac1e0e;
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 50px;
+        font-size: 14px;
+        
+    }
+
+    .delete-button:hover {
+        background-color: #610000;
+    }
+
+    .approve-button {
+        background-color: #27ae60;
+    }
+
+    .approve-button:hover {
+        background-color: #1e8449;
+    }
+
+    @media (max-width: 620px) {
+        .delete-button, .approve-button {
+        font-size: 10px;
+        
+    }
+
+    .idea-category {
+        font-size: 10px;
+    }
+        .idea-text {
+            font-size: 22px;
+        }
+
+        .idea-date {
+            font-size: 8px;
+        }
+
+        .idea-author {
+            font-size: 8px;
+        }
+
+        .btn-confirm, .btn-confirm2 {
+            font-size: 10px;
+        }
+
+        .btn-cancel, .btn-cancel2 {
+            font-size: 10px;
+        }
+
+        .custom-popup-body, .custom-popup-body2 {
+            font-size: 10px;
+        }
+    }
+
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js"></script>
+
+<script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+import { getFirestore, collection, query, getDocs, doc, deleteDoc, addDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
+    const firebaseConfig = {
+        apiKey: "AIzaSyCcMUsWV6eUR31thZDrdo4Bk8qb90wHcJg",
+        authDomain: "idealidea-36f22.firebaseapp.com",
+        databaseURL: "https://idealidea-36f22-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "idealidea-36f22",
+        storageBucket: "idealidea-36f22.appspot.com",
+        messagingSenderId: "292276589261",
+        appId: "1:292276589261:web:d251e1f617318e88f74f84",
+        measurementId: "G-Q9QG2CL22X"
+    };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        const ideasRef = collection(db, "ideas");
+        const approvedIdeasRef = collection(db, "approvedIdeas");
+        const historyRef = collection(db, "history");
+        const commentList = document.getElementById("commentList");
+        $("#loadingOverlay").show();
+
+        // Function to display comments
+        async function fetchIdeas() {
+                try {
+                    const querySnapshot = await getDocs(ideasRef);
+                    querySnapshot.forEach((doc, index) => {
+                        const idea = doc.data();
+                        if (idea.approvedIdeas === false) {
+                        const user_email = idea.user_email;
+                        const comment = idea.comment;
+                        const timestamp = idea.timestamp.toDate();
+                        const category = idea.category;
+                        const ideaElement = document.createElement("li");
+                        ideaElement.className = "idea";
+
+                        const ideaInfo = document.createElement("div");
+                        ideaInfo.className = "idea-info";
+
+                        const ideaText = document.createElement("div");
+                        ideaText.className = "idea-text";
+                        ideaText.textContent = comment;
+
+                        const ideaDate = document.createElement("div");
+                        ideaDate.className = "idea-date";
+                        ideaDate.textContent = `${timestamp.toLocaleString()}`;
+
+                        const ideaCategory = document.createElement("div");
+                        ideaCategory.className = "idea-category";
+                        ideaCategory.textContent = `Category: ${category}`;
+
+                        const ideaAuthorAndButtons = document.createElement("div");
+                        ideaAuthorAndButtons.className = "idea-author-and-buttons";
+
+                        const ideaAuthor = document.createElement("div");
+                        ideaAuthor.className = "idea-author";
+                        ideaAuthor.textContent = user_email;
+
+                        const ideaButtons = document.createElement("div");
+                        ideaButtons.className = "idea-buttons";
+
+                        const deleteButton = document.createElement("button");
+                        deleteButton.className = "delete-button";
+                        deleteButton.textContent = "Delete";
+                        deleteButton.id = `deleteButton_${index}`;
+
+                        deleteButton.addEventListener("click", () => {
+                            const commentId = doc.id; 
+                            const popup = document.getElementById("customPopup");
+                            popup.style.display = "block";
+
+                            document.getElementById("confirmCustomDelete").addEventListener("click", () => {
+
+                        const historyData = {
+                            comment: comment,
+                            action: "deleted", 
+                            date: new Date(),
+                        };
+
+                            // Adăugați comentariul șters în baza de date "history"
+                            addDoc(historyRef, historyData)
+                                .then((docRef) => {
+                                    console.log("Comment added to history:", docRef.id);
+                                })
+                                .catch((error) => {
+                                    console.error("Error adding comment to history:", error);
+                                });
+
+                                deleteCommentFromDatabase(commentId);
+
+                                ideaElement.remove();
+                                const deleteSuccessPopup = document.getElementById("deleteSuccessPopup");
+                                const closeDeleteSuccessPopup = document.getElementById("closeDeleteSuccessPopup");
+                                deleteSuccessPopup.style.display = "block";
+                                closeDeleteSuccessPopup.addEventListener("click", () => {
+                                    deleteSuccessPopup.style.display = "none";
+                                });
+
+                                const customPopup = document.getElementById("customPopup");
+                                customPopup.style.display = "none";
+                            });
+
+                            document.getElementById("cancelCustomDelete").addEventListener("click", () => {
+                                const customPopup = document.getElementById("customPopup");
+                                customPopup.style.display = "none";
+                            });
+                        });
+
+                        deleteButton.addEventListener("click", () => {
+                            const popup = document.getElementById("customPopup");
+                            popup.style.display = "block";
+                        });
+
+                        document.getElementById("confirmCustomDelete").addEventListener("click", () => {
+                            const customPopup = document.getElementById("customPopup");
+                            customPopup.style.display = "none";
+                        });
+
+                        document.getElementById("cancelCustomDelete").addEventListener("click", () => {
+                            const customPopup = document.getElementById("customPopup");
+                            customPopup.style.display = "none"; 
+                        });
+                        const approveButton = document.createElement("button");
+                        approveButton.className = "approve-button";
+                        approveButton.textContent = "Approve";
+                        approveButton.id = `approveButton_${index}`; 
+
+
+
+                        approveButton.addEventListener("click", () => {
+                            const popup2 = document.getElementById("customPopup2");
+                            popup2.style.display = "block";
+
+                            const commentId = doc.id; // Obțineți ID-ul documentului
+
+                            document.getElementById("confirmCustomDelete2").addEventListener("click", async () => {
+                                // Apelați funcția de aprobare
+                                await approveComment(commentId);
+                                ideaElement.remove();
+
+                                const historyData = {
+                            comment: comment,
+                            action: "approved", 
+                            date: new Date(),
+                        };
+
+              
+                            addDoc(historyRef, historyData)
+                                .then((docRef) => {
+                                    console.log("Comment added to history:", docRef.id);
+                                })
+                                .catch((error) => {
+                                    console.error("Error adding comment to history:", error);
+                                });
+                                const deleteSuccessPopup = document.getElementById("deleteSuccessPopup2");
+                                const closeDeleteSuccessPopup = document.getElementById("closeDeleteSuccessPopup2");
+                                deleteSuccessPopup.style.display = "block";
+                                closeDeleteSuccessPopup.addEventListener("click", () => {
+                                    deleteSuccessPopup.style.display = "none";
+                                });
+                            });
+
+                            document.getElementById("cancelCustomDelete2").addEventListener("click", () => {
+                                const customPopup2 = document.getElementById("customPopup2");
+                                customPopup2.style.display = "none";
+                            });
+                        });
+
+
+                        approveButton.addEventListener("click", () => {
+                            const popup2 = document.getElementById("customPopup2");
+                            popup2.style.display = "block";
+                        });
+
+                        document.getElementById("confirmCustomDelete2").addEventListener("click", () => {
+                            const customPopup2 = document.getElementById("customPopup2");
+                            customPopup2.style.display = "none";
+                        });
+
+                        document.getElementById("cancelCustomDelete2").addEventListener("click", () => {
+                            const customPopup2 = document.getElementById("customPopup2");
+                            customPopup2.style.display = "none"; 
+                        });
+
+                        ideaButtons.appendChild(deleteButton);
+                        ideaButtons.appendChild(approveButton);
+
+                        ideaAuthorAndButtons.appendChild(ideaAuthor);
+                        ideaAuthorAndButtons.appendChild(ideaButtons);
+
+                        ideaInfo.appendChild(ideaText);
+                        ideaInfo.appendChild(ideaCategory);
+                        ideaInfo.appendChild(ideaDate);
+
+                        ideaElement.appendChild(ideaAuthorAndButtons);
+                        ideaElement.appendChild(ideaInfo);
+
+                        commentList.appendChild(ideaElement);
+                    }
+                    });
+                    $("#loadingOverlay").hide();
+                } catch (error) {
+                    console.error("Error fetching ideas:", error);
+                }
+            }
+
+
+                fetchIdeas();
+
+                function deleteCommentFromDatabase(docId) {
+                    const commentDocRef = doc(ideasRef, docId);
+
+                    deleteDoc(commentDocRef)
+                        .then(() => {
+                            console.log("Comment deleted from database");
+                        })
+                        .catch((error) => {
+                            console.error("Error deleting comment from database:", error);
+                        });
+                }     
+
+                async function approveComment(commentId) {
+                    const commentDocRef = doc(ideasRef, commentId);
+
+                    try {
+                        await updateDoc(commentDocRef, {
+                            approvedIdeas: true
+                        });
+
+                        console.log("Comment approved successfully.");
+
+                        const customPopup2 = document.getElementById("customPopup2");
+                        customPopup2.style.display = "none";
+                    } catch (error) {
+                        console.error("Error updating approvedIdeas:", error);
+                    }
+                }
+</script>
+

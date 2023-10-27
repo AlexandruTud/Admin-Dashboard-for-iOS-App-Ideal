@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style2.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./icons8-user-90.png">
+    
+    <title>Login Page</title>
+</head>
+<body>
+    <div class="box">
+        <h2>Welcome back</h2>
+        <form id="login-form">
+          <div class="inputBox">
+            <input type="email" id="email" required>
+            <label><i class="fa fa-envelope"></i> Email</label>
+          </div>
+          <div class="inputBox">
+            <input type="password" id="password" required>
+            <label><i class="fa fa-lock"></i> Password</label>
+          </div>
+          <div id="error-message" class="error-message"></div>
+          <input type="submit" name="login" value="Login" id="login">
+          <a href="#" class="forgot-password" onclick="showPopup()">Forgot your password?</a>
+        </form>
+      </div>
+
+      <div id="popup" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closePopup()">&times;</span>
+            <p>Please contact your IT department in order to find your password.</p>
+        </div>
+      </div>
+
+  <script>
+    function showPopup() {
+        var popup = document.getElementById("popup");
+        popup.style.display = "block";
+    }
+
+    function closePopup() {
+        var popup = document.getElementById("popup");
+        popup.style.display = "none";
+    }
+  </script>
+</body>
+</html>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword , signOut, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-analytics.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAW-nmMdQc1adixReOvFmwVZknHw7ASwWs",
+    authDomain: "dashboard-b3201.firebaseapp.com",
+    projectId: "dashboard-b3201",
+    storageBucket: "dashboard-b3201.appspot.com",
+    messagingSenderId: "157775273606",
+    appId: "1:157775273606:web:581c05bafea8bf57f67b07",
+    measurementId: "G-YMRYLH5QEH"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth();
+
+  const loginForm = document.getElementById("login-form");
+  loginForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const errorMessage = document.getElementById("error-message");
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        window.location.href = "main.html";
+        email = "";
+        password = "";
+      })
+      .catch((error) => {
+        errorMessage.textContent = error.message;
+        errorMessage.style.display = "block";
+    });
+  });
+
+/* onAuthStateChanged(auth, function (user) {
+  if (user) {
+    // Utilizatorul este autentificat, redirecționează către "main.html" aici
+    window.location.href = "main.html";
+    console.log("User is logged in");
+  } else {
+    // Nu face nimic aici, utilizatorul nu este autentificat
+    console.log("User is not logged in");
+  }
+});*/ 
+
+
+</script>

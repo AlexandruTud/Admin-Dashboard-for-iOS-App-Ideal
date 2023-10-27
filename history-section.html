@@ -1,0 +1,186 @@
+<div class="grey-bg container-fluid p-2" id="dashh">
+    <div class="row">
+        <div class="col-12 mt-0 mb-1">
+            <h4 class="text-uppercase">HISTORY</h4>
+        </div>
+    </div>
+    <ul class="timeline" id="timeline">
+        <!-- Suggestions will be added here dynamically -->
+    </ul>
+   <!-- <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader"></div>
+    </div> -->
+</div>
+
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js"></script>
+
+<script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+import { getFirestore, collection, query, getDocs, doc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
+    const firebaseConfig = {
+    apiKey: "AIzaSyCcMUsWV6eUR31thZDrdo4Bk8qb90wHcJg",
+    authDomain: "idealidea-36f22.firebaseapp.com",
+    databaseURL: "https://idealidea-36f22-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "idealidea-36f22",
+    storageBucket: "idealidea-36f22.appspot.com",
+    messagingSenderId: "292276589261",
+    appId: "1:292276589261:web:d251e1f617318e88f74f84",
+    measurementId: "G-Q9QG2CL22X"
+  };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const historyRef = collection(db, "history");
+
+async function displayHistoryComments() {
+    const historyQuerySnapshot = await getDocs(historyRef);
+
+    historyQuerySnapshot.forEach((doc) => {
+        const historyData = doc.data(); 
+        const listItem = document.createElement("li");
+
+        listItem.className = historyData.action === "deleted" ? "" : "timeline-inverted";
+
+        const timelineBadge = document.createElement("div");
+        timelineBadge.className = "timeline-badge";
+
+        const timelinePanel = document.createElement("div");
+        timelinePanel.className = "timeline-panel";
+        const timelineHeading = document.createElement("div");
+        timelineHeading.className = "timeline-heading";
+        const headingText = document.createElement("div");
+        headingText.style.fontWeight = "bold";
+        headingText.style.marginRight = "10px";
+
+        if (historyData.action === "deleted") {
+            headingText.style.color = "red"; // For deleted comments
+            headingText.textContent = "This comment was deleted";
+        } else {
+            headingText.style.color = "green"; // For approved comments
+            headingText.textContent = "This comment was approved";
+        }
+
+        timelineHeading.appendChild(headingText);
+
+        headingText.style.fontSize = "14px";
+        headingText.textContent = historyData.action === "deleted" ? "This comment was deleted" : "This comment was approved";
+        timelineHeading.appendChild(headingText);
+
+        const timelineBody = document.createElement("div");
+        timelineBody.className = "timeline-body";
+        const commentText = document.createElement("div");
+        commentText.className = "suggestion-text";
+        commentText.style.marginTop = "0px";
+        commentText.style.color = "#ffffff";
+        commentText.style.fontSize = "24px";
+        commentText.textContent = historyData.action === "deleted" ? historyData.comment : historyData.comment;
+        timelineBody.appendChild(commentText);
+        const timelineFooter = document.createElement("div");
+        timelineFooter.className = "timeline-footer";
+        const dateText = document.createElement("div");
+        dateText.className = "suggestion-date";
+        dateText.style.color = "#ffffff51";
+        dateText.style.fontSize = "10px";
+        const timestamp = historyData.date;
+        const seconds = timestamp.seconds;
+        const nanoseconds = timestamp.nanoseconds;
+        const date = new Date(seconds * 1000 + nanoseconds / 1000000);
+
+        const day = String(date.getDate()).padStart(2, "0"); 
+        const month = String(date.getMonth() + 1).padStart(2, "0"); 
+        const year = date.getFullYear();
+        const hours = String(date.getHours()).padStart(2, "0");
+        const minutes = String(date.getMinutes()).padStart(2, "0");
+        const secondss = String(date.getSeconds()).padStart(2, "0");
+
+        dateText.textContent = `${day}/${month}/${year} ${hours}:${minutes}:${secondss}`;
+
+
+        
+        timelineFooter.appendChild(dateText);
+
+        timelinePanel.appendChild(timelineHeading);
+        timelinePanel.appendChild(timelineBody);
+        timelinePanel.appendChild(timelineFooter);
+
+        listItem.appendChild(timelineBadge);
+        listItem.appendChild(timelinePanel);
+
+        const historyList = document.querySelector(".timeline");
+        historyList.appendChild(listItem);
+    });
+    $("#loadingOverlay").hide();
+}
+
+displayHistoryComments();
+
+console.log("historyData.date from Firestore:", historyData.date);
+
+
+</script>
+
+<style>
+
+            .timeline {
+                list-style: none;
+                padding: 0;
+            }
+    
+            .timeline-panel {
+                box-shadow: 0px 0px 2px rgba(255, 255, 255, 0.1);
+                margin-bottom: 30px;
+                background-color: #141326;
+                border-radius: 2ch;
+                padding: 20px;
+                color:white;
+            }
+    
+            @media (max-width: 768px) {
+                 .suggestion-text{
+                    font-size: 14px;
+                 }
+                 .suggestion-date
+                 {
+                    font-size: 10px;
+                 }
+                 .suggestion-author{
+                    font-size: 10px;
+                 }
+            }
+
+            .loading-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: #11101D;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 999;
+            }
+
+
+            .loader {
+                border: 4px solid #f3f3f3;
+                border-top: 4px solid #3498db;
+                border-radius: 50%;
+                width: 50px;
+                height: 50px;
+                animation: spin 2s linear infinite;
+            }
+
+
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+    
+    </style>
